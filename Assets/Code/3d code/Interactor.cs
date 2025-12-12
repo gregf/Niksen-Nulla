@@ -1,0 +1,34 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+
+interface IInteractable{
+    public void Interact();
+}
+
+public class Interactor : MonoBehaviour
+{
+    public Transform InteractorSource;
+    public float InteractsRange;
+    // Start is called before the first frame update
+    void Start()
+    {
+        
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.E)){
+            Ray r = new Ray(InteractorSource.position, InteractorSource.forward);
+            if (Physics.Raycast(r, out RaycastHit hitInfo, InteractsRange)) {
+                if (hitInfo.collider.gameObject.TryGetComponent(out IInteractable interactObj)) {
+                    Cursor.visible = true;
+                    Cursor.lockState = CursorLockMode.None;
+                    interactObj.Interact();
+                }
+            }
+        }
+    }
+}
